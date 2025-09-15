@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 //app.use(cors());
 app.use(morgan('dev'));
-const allowedOrigin = 'https://edviron-frontend-d2fci2fvp-mercys-projects-f7f4a381.vercel.app';
+const allowedOrigin = 'https://edviron-frontend-livid.vercel.app';
 
 app.use(cors({
   origin: allowedOrigin,
