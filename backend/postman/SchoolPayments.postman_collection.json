@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "School Payments API (Cashfree Sandbox)",
+    "_postman_id": "9a7e8b0c-1234-5678-90ab-abcdef123456",
+    "description": "Postman collection for testing School Payments backend integrated with Cashfree Sandbox API.\n\n### 🔑 Sandbox Test Credentials\n\n**Test Card (Visa Debit)**\n- Card Number: 4706131211212123\n- Expiry: 05/2025\n- CVV: 123\n- OTP: 123456\n\n**Netbanking**\n- Bank: HDFC Bank\n- User ID: test\n- Password: test\n\n**UPI**\n- Handle: success@upi\n\n⚠️ Use only these sandbox credentials — do not use real cards/UPI.\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}" }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}" }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();",
+              "if (jsonData.token) {",
+              "  pm.environment.set('token', jsonData.token);",
+              "  console.log('✅ Token saved:', jsonData.token);",
+              "} else {",
+              "  console.log('❌ Token not found');",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Payment (Cashfree)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/create-payment", "host": ["{{baseUrl}}"], "path": ["create-payment"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"order_amount\": 100,\n  \"return_url\": \"https://google.com\",\n  \"student_info\": {\n    \"id\": \"STU1001\",\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"phone\": \"9999999999\"\n  }\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData = pm.response.json();",
+              "if (jsonData.order && jsonData.order.custom_order_id) {",
+              "  pm.environment.set('order_id', jsonData.order.custom_order_id);",
+              "  console.log('✅ Order ID saved:', jsonData.order.custom_order_id);",
+              "} else {",
+              "  console.log('❌ Order ID not found');",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Check Payment Status (Cashfree)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/check-payment-status/{{order_id}}", "host": ["{{baseUrl}}"], "path": ["check-payment-status", "{{order_id}}"] }
+      }
+    }
+  ]
+}
