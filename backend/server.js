@@ -14,8 +14,22 @@ const transactionRoutes = require('./src/routes/transactions');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+//app.use(cors());
 app.use(morgan('dev'));
+const allowedOrigin = 'https://edviron-frontend-7iwrzge4q-mercys-projects-f7f4a381.vercel.app';
+
+app.use(cors({
+  origin: allowedOrigin,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Handle preflight OPTIONS request for all routes
+app.options('*', cors({
+  origin: allowedOrigin,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 
 // connect DB
