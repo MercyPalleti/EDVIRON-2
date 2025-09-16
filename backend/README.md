@@ -1,5 +1,19 @@
 # EDVIRON Backend API Documentation
-Set up environment variables:
+
+## Project Setup Instructions
+
+1. Clone the repository:
+    ```bash
+    git clone <repository-url>
+    cd backend
+    ```
+
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
+
+3. Set up environment variables:
     Create a `.env` file in the root directory and define necessary variables, e.g.:
     ```env
     
