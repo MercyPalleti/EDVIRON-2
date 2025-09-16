@@ -37,14 +37,6 @@ CASHFREE_APP_ID=<your-cashfree-app-id>
 
 CASHFREE_SECRET_KEY=<your-cashfree-secret-key>
 
-
-## Base URL
-```
-http://localhost:5000/api
-```
-
----
-
 ## Authentication Routes
 
 ### POST `/auth/register`
